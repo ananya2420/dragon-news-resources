@@ -7,19 +7,25 @@ import { CiBookmark, CiShare2 } from 'react-icons/ci';
 import { BsArrowRight } from 'react-icons/bs';
 
 
-export const  generateMetadata=async({params})=>{
-  const {id}=await params;
+export const generateMetadata = async ({ params }) => {
+  const { id } = await params;
+  
 
-     console.log(id,"params");
+  const news = await getNewsDetailsById(id);
 
-  const news=await getNewsDetailsById(id);
-  console.log(news,"news");
+  
+  if (!news) {
+    return {
+      title: "News Not Found",
+      description: "The requested news could not be found."
+    };
+  }
 
   return {
     title: news.title,
-    description: news.details,
-  }
-}
+    description: news.details?.slice(0, 160), 
+  };
+};
 
 const NewsDetailsPage = async ({ params }) => {
 
@@ -35,51 +41,72 @@ const NewsDetailsPage = async ({ params }) => {
     );
   }
 
-  return (
-    <div className="card bg-base-100 shadow-sm">
-      <figure>
-        <img src={news.thumbnail_url} alt={news.title} />
-      </figure>
-
-      <div className="card-body text-sm">
-        <h2 className="card-title text-sm">{news.title}</h2>
-        <p className="truncate text-sm">{news.details}</p>
-
-        <div className="flex items-center gap-2 mt-4">
+ return (
+    <div className="card bg-base-100 border border-gray-200 rounded-md p-5 shadow-sm max-w-4xl mx-auto">
+      
+      {/* 1. Header: Author and Actions */}
+      <div className="flex items-center justify-between mb-6 bg-gray-50 p-3 rounded-md">
+        <div className="flex items-center gap-3">
           <img
             src={news.author?.img}
             alt={news.author?.name}
-            className="w-10 h-10 rounded-full"
+            className="w-12 h-12 rounded-full object-cover border border-gray-300"
           />
           <div>
-            <p className="font-semibold">{news.author?.name}</p>
-            <p className="text-sm text-gray-500">
-              {news.author?.published_date}
-            </p>
+            <p className="font-bold text-gray-800">{news.author?.name || "Unknown Author"}</p>
+            <p className="text-xs text-gray-500">{news.author?.published_date}</p>
           </div>
         </div>
-
-        <div className="flex items-center justify-between mt-4">
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-1">
-              <IoIosStar className="text-lg text-yellow-500" />
-              <span>{news.rating?.number}</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <FaEye className="text-lg" />
-              <span>{news.total_view}</span>
-            </div>
-          </div>
-
-          <div className="flex gap-2">
-            <CiShare2 className="text-xl cursor-pointer" />
-            <CiBookmark className="text-xl cursor-pointer" />
-          </div>
+        <div className="flex gap-3 text-gray-600 text-2xl">
+          <CiBookmark className="cursor-pointer hover:text-purple-500" />
+          <CiShare2 className="cursor-pointer hover:text-purple-500" />
         </div>
+      </div>
 
-        <div className="card-actions justify-end mt-4">
+      {/* 2. Main Content: Title and Large Image */}
+      <div className="space-y-5">
+        <h2 className="text-2xl font-extrabold text-gray-900 leading-tight">
+          {news.title}
+        </h2>
+
+          <figure className="w-full px-4 flex justify-center"> {/* flex এবং justify-center যোগ করা হয়েছে */}
+  <img 
+    src={news.thumbnail_url} 
+    alt={news.title} 
+    className="w-1/2 h-32 object-cover rounded-md" // h-32 (উচ্চতা) এবং w-1/2 (উইডথ) করা হয়েছে
+  />
+</figure>
+
+        {/* Full Details Text */}
+        <p className="text-gray-700 text-base leading-relaxed text-justify mt-6">
+          {news.details}
+        </p>
+
+        <hr className="border-gray-200 my-6" />
+
+        {/* 3. Footer: Ratings, Views, and Back Button */}
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-6">
+            <div className="flex items-center gap-2">
+              <div className="flex text-orange-400 text-xl">
+                <IoIosStar /> <IoIosStar /> <IoIosStar /> <IoIosStar /> <IoIosStar />
+              </div>
+              <span className="font-bold text-gray-700">{news.rating?.number}</span>
+            </div>
+            
+            <div className="flex items-center gap-2 text-gray-500">
+              <FaEye className="text-xl" />
+              <span className="font-medium">{news.total_view}</span>
+            </div>
+          </div>
+
           <Link href={`/category/${news.category_id}`}>
-            <button className="btn bg-purple-500 text-white">See other news in this categories <BsArrowRight /></button>
+           <button 
+  style={{ backgroundColor: '#9333ea', color: 'white' }} 
+  className="btn border-none flex items-center gap-2 px-6"
+>
+  All news in this category <BsArrowRight className="text-lg" />
+</button>
           </Link>
         </div>
       </div>

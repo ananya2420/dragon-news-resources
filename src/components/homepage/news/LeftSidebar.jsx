@@ -24,7 +24,7 @@ const LeftSidebar = ({activeId}) => {
   }, []);
 
   if (loading) {
-    return <div className="text-center mt-6">Loading categories...</div>;
+    return <div className="text-center text-white mt-6">Loading categories...</div>;
   }
 
   return (
