@@ -5,6 +5,8 @@ import { getCategories, getNewsByCategoryId } from '@/lib/data';
 import React from 'react'
 
 
+
+
 const NewsCategoryPage = async({params}) => {
 
     const { id } = await params;
@@ -21,23 +23,31 @@ const NewsCategoryPage = async({params}) => {
 
 
   return (
-     <div className="container mx-auto grid grid-cols-12 gap-4 my-15">
+    <div className="container mx-auto grid grid-cols-12 gap-6 my-16">
 
+      {/* Left Sidebar */}
       <div className="col-span-3">
-         <LeftSidebar activeId={id}/>
+        <LeftSidebar activeId={id} />
       </div>
 
-      <div className=" text-3xl text-black bg-purple-100 col-span-6">
-        <h2 className='font-bold text-lg'>{title}</h2>
-        <div className="space-y-4 mt-6">
-        {
-          newsItems.length > 0 ? newsItems.map((n)=>{
-            return <NewsCard key={n._id} news={n} className="p-6 rounded-md border" />
-          }):<h2 className='font-bold text-4xl text-center my-7'>No News Found</h2>}
+      {/* Main Content Area */}
+      <div className="col-span-6">
+        <h2 className="font-bold text-2xl text-gray-800 mb-6">{title}</h2>
+        <div className="space-y-6">
+          {newsItems.length > 0 ? (
+            newsItems.map((n) => (
+              <NewsCard key={n._id} news={n} />
+            ))
+          ) : (
+            <h2 className="font-bold text-4xl text-center my-12 text-gray-500">
+              No News Found
+            </h2>
+          )}
         </div>
       </div>
 
-      <div className="bg-yellow-100 col-span-3">
+      {/* Right Sidebar */}
+      <div className="col-span-3">
         <RightSidebar />
       </div>
 

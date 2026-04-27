@@ -25,3 +25,21 @@ export async function getNewsByCategoryId(category_id){
     return [];
   }
 }
+
+export async function getNewsDetailsById(news_id) {
+  try {
+    const res = await fetch(
+      `https://openapi.programming-hero.com/api/news/${news_id}`
+    );
+    const data = await res.json();
+    console.log('getNewsDetailsById response for', news_id, ':', data);
+    // Handle both array and single object responses
+    if (Array.isArray(data?.data)) {
+      return data.data[0] || null;
+    }
+    return data?.data || null;
+  } catch (error) {
+    console.error('Error in getNewsDetailsById:', error);
+    return null;
+  }
+}

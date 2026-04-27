@@ -10,9 +10,9 @@ const NewsCard = ({ news, className }) => {
       <figure>
         <img src={news.thumbnail_url} alt={news.title} />
       </figure>
-      <div className="card-body">
-        <h2 className="card-title">{news.title}</h2>
-        <p className="truncate">{news.details}</p>
+      <div className="card-body text-sm">
+        <h2 className="card-title text-sm">{news.title}</h2>
+        <p className="truncate text-sm">{news.details}</p>
 
         <div className="flex items-center gap-2 mt-4">
           <img
