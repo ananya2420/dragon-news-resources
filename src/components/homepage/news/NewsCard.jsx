@@ -67,6 +67,9 @@ const NewsCard = ({ news, className }) => {
             <FaEye className="text-lg" />
             <span className="font-medium">{news.total_view}</span>
           </div>
+          <Link href={`/news/${news._id}`}>
+            <button className="btn">See details</button>
+          </Link>
         </div>
       </div>
     </div>
